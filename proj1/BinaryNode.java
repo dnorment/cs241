@@ -17,6 +17,12 @@ public class BinaryNode<T>
         leftChild = rightChild = null;
     }
     
+    public BinaryNode(T info)
+    {
+        data = info;
+        leftChild = rightChild = null;
+    }
+    
     public BinaryNode(T info, BinaryNode<T> leftNode, BinaryNode<T> rightNode)
     {
         data = info;
