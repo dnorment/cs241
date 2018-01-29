@@ -57,6 +57,26 @@ public class BinaryNode<T>
         return rightChild;
     }
     
+    public BinaryNode<T> getLeftmost(BinaryNode<T> node)
+    {
+        BinaryNode<T> child = node;
+        while (child.getLeftChild() != null)
+        {
+            child = child.getLeftChild();
+        }
+        return child;
+    }
+    
+    public BinaryNode<T> getRightmost(BinaryNode<T> node)
+    {
+        BinaryNode<T> child = node;
+        while (child.getRightChild() != null)
+        {
+            child = child.getRightChild();
+        }
+        return child;
+    }
+    
     /**
      * Sets the data in the BinaryNode.
      * @param info  The data to be set.

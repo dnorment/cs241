@@ -14,7 +14,7 @@ public class Project1
         System.out.println(" P  Find predecessor");
         System.out.println(" S  Find successor");
         System.out.println(" E  Exit the program");
-        System.out.println(" H  Display this message");
+        System.out.print(" H  Display this message");
     }
     
     public static void main(String[] args)
@@ -45,10 +45,11 @@ public class Project1
             System.out.print("Command? ");
             input = kb.nextLine();
             cmd = input.charAt(0);
+            int value;
             switch(cmd)
             {
                 case 'I': //insert value
-                    int value = Integer.parseInt(input.substring(2));
+                    value = Integer.parseInt(input.substring(2));
                     if (bst.contains(value))
                     {
                         System.out.printf("%d already exists, ignore.", value);
@@ -56,18 +57,44 @@ public class Project1
                     else
                     {
                         bst.add(value);
-                        System.out.println("In-order: ");
+                        System.out.print("In-order: ");
                         bst.printInOrder();
                     }
                     break;
                 case 'D': //delete value
-                    
+                    value = Integer.parseInt(input.substring(2));
+                    if (bst.contains(value))
+                    {
+                        bst.remove(value);
+                        System.out.print("In-order: ");
+                        bst.printInOrder();
+                    }
+                    else
+                    {
+                        System.out.printf("%d doesn't exist!", value);
+                    }
                     break;
                 case 'P': //find predecessor
-                    
+                    value = Integer.parseInt(input.substring(2));
+                    if (bst.contains(value))
+                    {
+                        System.out.print(bst.predecessor(value));
+                    }
+                    else
+                    {
+                        System.out.printf("%d doesn't exist!", value);
+                    }
                     break;
                 case 'S': //find successor
-                    
+                    value = Integer.parseInt(input.substring(2));
+                    if (bst.contains(value))
+                    {
+                        System.out.print(bst.successor(value));
+                    }
+                    else
+                    {
+                        System.out.printf("%d doesn't exist!", value);
+                    }
                     break;
                 case 'E': //exit
                     break;

@@ -40,6 +40,23 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         return entry;
     }
     
+    public BinaryNode<T> findNode(T data)
+    {
+        BinaryNode<T> node = root;
+        while (data.compareTo(node.getData()) != 0) //while data not matching node
+        {
+            if (data.compareTo(node.getData()) < 0) //data is less than current node
+            {
+                node = node.getLeftChild();
+            }
+            else //data is greater than current node
+            {
+                node = node.getRightChild();
+            }
+        }
+        return node;
+    }
+    
     public T getEntry(T data)
     {
         return findEntry(root, data);
@@ -92,16 +109,166 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
-    public T remove(T data)
+    public BinaryNode<T> removeEntry(BinaryNode<T> node, T data)
     {
-        if (contains(data))
+        if (node == null) //the parent node is empty (is a leaf). remove parent by setting child to null (node is null)
+        {
+            return node;
+        }
+        else //parent has at least 1 child
+        {
+            if (data.compareTo(node.getData()) < 0) //data less than current node
+            {
+                node.setLeftChild(removeEntry(node.getLeftChild(), data));
+            }
+            else if (data.compareTo(node.getData()) > 0) //data greater than current node
+            {
+                node.setRightChild(removeEntry(node.getRightChild(), data));
+            }
+            else //data same as current node, so delete this node
+            {
+                if (node.getLeftChild() == null) //node has no left child, so set to right child
+                {
+                    return node.getRightChild();
+                }
+                else if (node.getRightChild() == null) //node has no right child, so set to left child
+                {
+                    return node.getLeftChild();
+                }
+                
+                BinaryNode<T> current = node; //get successor
+                T succ = current.getRightChild().getData();
+                while (current.getLeftChild() != null)
+                {
+                    current = current.getLeftChild();
+                    succ = current.getData();
+                }
+                node.setData(succ);
+                //delete successor
+                node.setRightChild(removeEntry(node.getRightChild(), node.getData()));
+            }
+        }
+        return node;
+    }
+    
+    public void remove(T data)
+    {
+        if (data.compareTo(root.getData()) == 0) //remove root
+        {
+            //TODO
+        }
+        else //remove node
+        {
+            removeEntry(root, data);
+        }
+    }
+    
+    /*public BinaryNode<T> findParent(BinaryNode<T> child)
+    {
+        if (child == root)
         {
             return null;
         }
         else
         {
-            return null;
+            BinaryNode<T> parent = root;
+            while (parent.getLeftChild() != child && parent.getRightChild() != child) //while either child of parent is not child
+            {
+                if (child.getData().compareTo(parent.getData()) < 0) //child less than current node
+                {
+                    parent = parent.getLeftChild();
+                }
+                else //if (child.getData().compareTo(parent.getData()) > 0) //child greater than current node
+                {
+                    parent = parent.getRightChild();
+                }
+            }
+            return parent;
         }
+    }*/
+    
+    public BinaryNode<T> findPredecessor(BinaryNode<T> node)
+    {
+        if (node.getLeftChild() != null)
+        {
+            return node.getRightmost(node.getLeftChild());
+        }
+        BinaryNode<T> pred = null;
+        BinaryNode<T> current = root;
+        while (current != null && node.getData().compareTo(current.getData()) != 0)
+        {
+            if (node.getData().compareTo(current.getData()) < 0) //node less than current node
+            {
+                current = current.getLeftChild();
+            }
+            else //node greater than current node
+            {
+                pred = current;
+                current = current.getRightChild();
+            }
+        }
+        if (pred.getLeftChild() != null)
+        {
+            if (node.getData().compareTo(root.getRightmost(pred.getLeftChild()).getData()) > 0) //node greater than rightmost of left subtree
+            {
+                return pred;
+            }
+            else
+            {
+                return root.getRightmost(pred.getLeftChild());
+            }
+        }
+        else
+        {
+            return pred;
+        }
+    }
+    
+    public T predecessor(T data)
+    {
+        return findPredecessor(findNode(data)).getData(); //return data of predecessor of node matching data
+    }
+    
+    public BinaryNode<T> findSuccessor(BinaryNode<T> node)
+    {
+        if (node.getRightChild() != null)
+        {
+            return node.getLeftmost(node.getRightChild());
+        }
+        BinaryNode<T> pred = null;
+        BinaryNode<T> current = root;
+        while (current != null && node.getData().compareTo(current.getData()) != 0)
+        {
+            if (node.getData().compareTo(current.getData()) > 0) //node greater than current node
+            {
+                current = current.getRightChild();
+            }
+            else //node greater than current node
+            {
+                pred = current;
+                current = current.getLeftChild();
+            }
+        }
+        if (pred.getRightChild() != null)
+        {
+            if (node.getData().compareTo(root.getLeftmost(pred.getRightChild()).getData()) > 0) //node greater than leftmost of right subtree
+            {
+                return pred;
+            }
+            else
+            {
+                return root.getLeftmost(pred.getRightChild());
+            }
+        }
+        else
+        {
+            return pred;
+        }
+    }
+    
+    public T successor(T data)
+    {
+        return findSuccessor(findNode(data)).getData(); //return data of predecessor of node matching data
     }
     
     public void printPreOrder()
