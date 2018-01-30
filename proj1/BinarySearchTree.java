@@ -137,12 +137,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
                 }
                 
                 BinaryNode<T> current = node; //get successor
-                T succ = current.getRightChild().getData();
-                while (current.getLeftChild() != null)
-                {
-                    current = current.getLeftChild();
-                    succ = current.getData();
-                }
+                T succ = successor(node.getData());
                 node.setData(succ);
                 //delete successor
                 node.setRightChild(removeEntry(node.getRightChild(), node.getData()));
@@ -155,37 +150,29 @@ public class BinarySearchTree<T extends Comparable<? super T>>
     {
         if (data.compareTo(root.getData()) == 0) //remove root
         {
-            //TODO
+            if (root.getLeftChild() != null) //root has a left child
+            {
+                T temp = root.getRightmost(root.getLeftChild()).getData(); //store data of predecessor
+                remove(temp);
+                root.setData(temp);
+            }
+            else if (root.getRightChild() != null) //root has a right child, but no left child
+            {
+                T temp = root.getLeftmost(root.getRightChild()).getData(); //store data of successor
+                remove(temp);
+                root.setData(temp);
+            }
+            else //root has no children, so it is the only node
+            {
+                root.setData(null);
+                root = null;
+            }
         }
         else //remove node
         {
             removeEntry(root, data);
         }
     }
-    
-    /*public BinaryNode<T> findParent(BinaryNode<T> child)
-    {
-        if (child == root)
-        {
-            return null;
-        }
-        else
-        {
-            BinaryNode<T> parent = root;
-            while (parent.getLeftChild() != child && parent.getRightChild() != child) //while either child of parent is not child
-            {
-                if (child.getData().compareTo(parent.getData()) < 0) //child less than current node
-                {
-                    parent = parent.getLeftChild();
-                }
-                else //if (child.getData().compareTo(parent.getData()) > 0) //child greater than current node
-                {
-                    parent = parent.getRightChild();
-                }
-            }
-            return parent;
-        }
-    }*/
     
     public BinaryNode<T> findPredecessor(BinaryNode<T> node)
     {
@@ -207,7 +194,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
                 current = current.getRightChild();
             }
         }
-        if (pred.getLeftChild() != null)
+        if (pred != null && pred.getLeftChild() != null)
         {
             if (node.getData().compareTo(root.getRightmost(pred.getLeftChild()).getData()) > 0) //node greater than rightmost of left subtree
             {
@@ -235,7 +222,7 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         {
             return node.getLeftmost(node.getRightChild());
         }
-        BinaryNode<T> pred = null;
+        BinaryNode<T> succ = null;
         BinaryNode<T> current = root;
         while (current != null && node.getData().compareTo(current.getData()) != 0)
         {
@@ -245,24 +232,24 @@ public class BinarySearchTree<T extends Comparable<? super T>>
             }
             else //node greater than current node
             {
-                pred = current;
+                succ = current;
                 current = current.getLeftChild();
             }
         }
-        if (pred.getRightChild() != null)
+        if (succ != null && succ.getRightChild() != null)
         {
-            if (node.getData().compareTo(root.getLeftmost(pred.getRightChild()).getData()) > 0) //node greater than leftmost of right subtree
+            if (node.getData().compareTo(root.getLeftmost(succ.getRightChild()).getData()) > 0) //node greater than leftmost of right subtree
             {
-                return pred;
+                return succ;
             }
             else
             {
-                return root.getLeftmost(pred.getRightChild());
+                return root.getLeftmost(succ.getRightChild());
             }
         }
         else
         {
-            return pred;
+            return succ;
         }
     }
     

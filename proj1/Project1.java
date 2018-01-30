@@ -78,7 +78,14 @@ public class Project1
                     value = Integer.parseInt(input.substring(2));
                     if (bst.contains(value))
                     {
-                        System.out.print(bst.predecessor(value));
+                        try
+                        {
+                            System.out.print(bst.predecessor(value));
+                        }
+                        catch (NullPointerException e)
+                        {
+                            System.out.printf("%d is the first value in order", value);
+                        }
                     }
                     else
                     {
@@ -89,7 +96,14 @@ public class Project1
                     value = Integer.parseInt(input.substring(2));
                     if (bst.contains(value))
                     {
-                        System.out.print(bst.successor(value));
+                        try
+                        {
+                            System.out.print(bst.successor(value));
+                        }
+                        catch (NullPointerException e)
+                        {
+                            System.out.printf("%d is the last value in order", value);
+                        }
                     }
                     else
                     {
@@ -106,6 +120,6 @@ public class Project1
             }
             System.out.println();
         }
-        System.out.println("Thank you for using my program!");
+        System.out.print("Thank you for using my program!");
     }
 }
