@@ -7,6 +7,9 @@ import java.util.Scanner;
  */
 public class Project1
 {
+    /**
+     * Print out the options for the user to interact with the BST.
+     */
     public static void printOptions()
     {
         System.out.println(" I  Insert a value");
@@ -25,12 +28,12 @@ public class Project1
         System.out.println("Please enter the initial sequence of values:");
         String input = kb.nextLine();
         kb = new Scanner(input);
-        while (kb.hasNextInt())
+        while (kb.hasNextInt()) //read through the inputted integers and add them to the BST
         {
             bst.add(kb.nextInt());
         }
         
-        System.out.print("Pre-order: ");
+        System.out.print("Pre-order: "); //print each order of values in the BST
         bst.printPreOrder();
         System.out.printf("%nIn-order: ");
         bst.printInOrder();
@@ -39,14 +42,14 @@ public class Project1
         System.out.println();
         
         char cmd = '~';
-        kb = new Scanner(System.in);
-        while(cmd != 'E')
+        kb = new Scanner(System.in); //Scanner to read command from user
+        while(cmd != 'E') //exit when command is E
         {
             System.out.print("Command? ");
             input = kb.nextLine();
             cmd = input.charAt(0);
             int value;
-            switch(cmd)
+            switch(cmd) //parse command
             {
                 case 'I': //insert value
                     value = Integer.parseInt(input.substring(2));
@@ -82,7 +85,7 @@ public class Project1
                         {
                             System.out.print(bst.predecessor(value));
                         }
-                        catch (NullPointerException e)
+                        catch (NullPointerException e) //only happens when value is the first
                         {
                             System.out.printf("%d is the first value in order", value);
                         }
@@ -100,7 +103,7 @@ public class Project1
                         {
                             System.out.print(bst.successor(value));
                         }
-                        catch (NullPointerException e)
+                        catch (NullPointerException e) //only happens when value is the last
                         {
                             System.out.printf("%d is the last value in order", value);
                         }
@@ -115,7 +118,7 @@ public class Project1
                 case 'H': //print menu
                     Project1.printOptions();
                     break;
-                default:
+                default: //else, print menu
                     Project1.printOptions();
             }
             System.out.println();

@@ -57,6 +57,11 @@ public class BinaryNode<T>
         return rightChild;
     }
     
+    /**
+     * Returns the BinaryNode that is the leftmost child of the parameter node.
+     * @param node  The node of which to find the leftmost child.
+     * @return  The leftmost child of the parameter node.
+     */
     public BinaryNode<T> getLeftmost(BinaryNode<T> node)
     {
         BinaryNode<T> child = node;
@@ -67,6 +72,11 @@ public class BinaryNode<T>
         return child;
     }
     
+    /**
+     * Returns the BinaryNode that is the rightmost child of the parameter node.
+     * @param node  The node of which to find the rightmost child.
+     * @return  The rightmost child of the parameter node.
+     */
     public BinaryNode<T> getRightmost(BinaryNode<T> node)
     {
         BinaryNode<T> child = node;

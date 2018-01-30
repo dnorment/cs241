@@ -19,6 +19,11 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         this.root = root;
     }
     
+    /**
+     * Finds the data in a subtree rooted at parameter node. Returns null if the entry is not found.
+     * @param node  The root of the subtree in which to search for the data.
+     * @param data  The data of the node for which to search.
+     */
     public T findEntry(BinaryNode<T> node, T data)
     {
         T entry = null;
@@ -40,6 +45,11 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         return entry;
     }
     
+    /**
+     * Finds the node containing the paramter data.
+     * @param data  The data of the node to find.
+     * @return  The BinaryNode that contains the given data.
+     */
     public BinaryNode<T> findNode(T data)
     {
         BinaryNode<T> node = root;
@@ -57,16 +67,21 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         return node;
     }
     
-    public T getEntry(T data)
-    {
-        return findEntry(root, data);
-    }
-    
+    /**
+     * Returns whether the data is in the BST or not.
+     * @param data  The data to determine existence in the BST.
+     * @return True is the data is in the BST, false otherwise.
+     */
     public boolean contains(T data)
     {
-        return getEntry(data) != null;
+        return findEntry(root, data) != null;
     }
     
+    /**
+     * A recursive method that adds the entry to the BST.
+     * @param node  The node at which the current subtree is rooted.
+     * @param data  The data to add at the current subtree.
+     */
     public void addEntry(BinaryNode<T> node, T data)
     {
         if (data.compareTo(node.getData()) == 0) //data is same as data in current node
@@ -97,6 +112,10 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
+    /**
+     * Helper method that adds the data to the BST starting at the root.
+     * @param data  The data to add to the BST.
+     */
     public void add(T data)
     {
         if (root == null) //tree is empty
@@ -109,6 +128,12 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
+    /**
+     * A recursive method to remove an entry from the BST rooted at the parameter node.
+     * @param node  The root of the current subtree at which to add the data.
+     * @param data  The data to add to the BST.
+     * @return  The BinaryNode that matches the current data, which is the same BinaryNode to be removed.
+     */
     public BinaryNode<T> removeEntry(BinaryNode<T> node, T data)
     {
         if (node == null) //the parent node is empty (is a leaf). remove parent by setting child to null (node is null)
@@ -146,6 +171,10 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         return node;
     }
     
+    /**
+     * Helper method that removes the data from the BST starting at the root. Also handles deletion when the node to remove is the root.
+     * @param data  The data to remove from the BST.
+     */
     public void remove(T data)
     {
         if (data.compareTo(root.getData()) == 0) //remove root
@@ -174,6 +203,11 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
+    /**
+     * Finds the BinaryNode that precedes the parameter node in an in-order sequence.
+     * @param node  The node of which to find the predecessor.
+     * @return  The BinaryNode that is the predecessor of the given node. Is null when the node is the first in order.
+     */
     public BinaryNode<T> findPredecessor(BinaryNode<T> node)
     {
         if (node.getLeftChild() != null)
@@ -211,11 +245,21 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
+    /**
+     * Helper method that finds the predecessor of the given data.
+     * @param data  The data of which to find the predecesssor.
+     * @return  The data that precedes the given data. Is null when the data is the first in order.
+     */
     public T predecessor(T data)
     {
         return findPredecessor(findNode(data)).getData(); //return data of predecessor of node matching data
     }
     
+    /**
+     * Finds the BinaryNode that succeeds the parameter node in an in-order sequence.
+     * @param node  The node of which to find the successor.
+     * @return  The BinaryNode that is the successor of the given node. Is null when the node is the last in order.
+     */
     public BinaryNode<T> findSuccessor(BinaryNode<T> node)
     {
         if (node.getRightChild() != null)
@@ -253,26 +297,44 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
+    /**
+     * Helper method that finds the successor of the given data.
+     * @param data  The data of which to find the successor.
+     * @return  The data that succeeds the given data. Is null when the data is the last in order.
+     */
     public T successor(T data)
     {
         return findSuccessor(findNode(data)).getData(); //return data of predecessor of node matching data
     }
     
+    /**
+     * Helper method that calls the preOrder method from the root.
+     */
     public void printPreOrder()
     {
         preOrder(root);
     }
     
+    /**
+     * Helper method that calls the inOrder method from the root.
+     */
     public void printInOrder()
     {
         inOrder(root);
     }
     
+    /**
+     * Helper method that calls the postOrder method from the root.
+     */
     public void printPostOrder()
     {
         postOrder(root);
     }
     
+    /**
+     * Prints the pre-order traversal of the BST rooted at the parameter node.
+     * @param node  The root of the subtree at which to print the pre-order traversal.
+     */
     public void preOrder(BinaryNode<T> node)
     {
         if (node != null)
@@ -283,6 +345,10 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
+    /**
+     * Prints the in-order traversal of the BST rooted at the parameter node.
+     * @param node  The root of the subtree at which to print the in-order traversal.
+     */
     public void inOrder(BinaryNode<T> node)
     {
         if (node != null)
@@ -293,6 +359,10 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         }
     }
     
+    /**
+     * Prints the post-order traversal of the BST rooted at the parameter node.
+     * @param node  The root of the subtree at which to print the post-order traversal.
+     */
     public void postOrder(BinaryNode<T> node)
     {
         if (node != null)
