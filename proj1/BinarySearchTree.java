@@ -29,17 +29,17 @@ public class BinarySearchTree<T extends Comparable<? super T>>
         T entry = null;
         if (node != null)
         {
-            if (data.compareTo(node.getData()) == 0)
+            if (data.compareTo(node.getData()) == 0) //node matches data
             {
-                entry = node.getData();
+                entry = node.getData(); //set entry to node data
             }
-            else if (data.compareTo(node.getData()) < 0)
+            else if (data.compareTo(node.getData()) < 0) //data less than node data
             {
-                entry = findEntry(node.getLeftChild(), data);
+                entry = findEntry(node.getLeftChild(), data); //set node to left child and repeat
             }
-            else
+            else //data greater than node data
             {
-                entry = findEntry(node.getRightChild(), data);
+                entry = findEntry(node.getRightChild(), data); //set node to right child and repeat
             }
         }
         return entry;
@@ -188,13 +188,13 @@ public class BinarySearchTree<T extends Comparable<? super T>>
             else if (root.getRightChild() != null) //root has a right child, but no left child
             {
                 T temp = root.getLeftmost(root.getRightChild()).getData(); //store data of successor
-                remove(temp);
-                root.setData(temp);
+                remove(temp); //remove node that is the successor
+                root.setData(temp); //set root data to successor data
             }
             else //root has no children, so it is the only node
             {
-                root.setData(null);
-                root = null;
+                root.setData(null); //remove node data
+                root = null; //remove root
             }
         }
         else //remove node
@@ -210,36 +210,36 @@ public class BinarySearchTree<T extends Comparable<? super T>>
      */
     public BinaryNode<T> findPredecessor(BinaryNode<T> node)
     {
-        if (node.getLeftChild() != null)
+        if (node.getLeftChild() != null) //if node has a left child
         {
-            return node.getRightmost(node.getLeftChild());
+            return node.getRightmost(node.getLeftChild()); //return rightmost child of left subtree
         }
         BinaryNode<T> pred = null;
         BinaryNode<T> current = root;
-        while (current != null && node.getData().compareTo(current.getData()) != 0)
+        while (current != null && node.getData().compareTo(current.getData()) != 0) //
         {
             if (node.getData().compareTo(current.getData()) < 0) //node less than current node
             {
-                current = current.getLeftChild();
+                current = current.getLeftChild(); //traverse left
             }
             else //node greater than current node
             {
-                pred = current;
-                current = current.getRightChild();
+                pred = current; //set pred to predecessor of current
+                current = current.getRightChild(); //traverse right
             }
         }
-        if (pred != null && pred.getLeftChild() != null)
+        if (pred != null && pred.getLeftChild() != null) //if predecessor exists and has a left child
         {
             if (node.getData().compareTo(root.getRightmost(pred.getLeftChild()).getData()) > 0) //node greater than rightmost of left subtree
             {
                 return pred;
             }
-            else
+            else //node less than rightmost of left subtree, so use rightmost of left subtree as predecessor
             {
                 return root.getRightmost(pred.getLeftChild());
             }
         }
-        else
+        else //predecessor either doesn't exist or has no left child
         {
             return pred;
         }
@@ -276,22 +276,22 @@ public class BinarySearchTree<T extends Comparable<? super T>>
             }
             else //node greater than current node
             {
-                succ = current;
-                current = current.getLeftChild();
+                succ = current; //set succ to successor of current
+                current = current.getLeftChild(); //traverse left
             }
         }
-        if (succ != null && succ.getRightChild() != null)
+        if (succ != null && succ.getRightChild() != null) //if successor ecists and has a right child
         {
             if (node.getData().compareTo(root.getLeftmost(succ.getRightChild()).getData()) > 0) //node greater than leftmost of right subtree
             {
                 return succ;
             }
-            else
+            else //node less than leftmost of right subtree, so use leftmost of right subtree as successor
             {
                 return root.getLeftmost(succ.getRightChild());
             }
         }
-        else
+        else //successor either doesn't exist or has no right child
         {
             return succ;
         }
