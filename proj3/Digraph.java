@@ -54,12 +54,41 @@ public class Digraph
         City target = null;
         for (int i=0; i<cities.length; i++)
         {
-            if (cities[i].toString().contains(cityCode))
+            if (cities[i].getCityCode().contains(cityCode))
             {
                 target = cities[i];
             }
         }
         return target;
+    }
+    
+    /**
+     * Inserts a road from one city to another with the given distance between them.
+     * @param fromCity  The origin vertex for the edge.
+     * @param toCity  The end vertex for the edge.
+     */
+    public void insertRoad(City fromCity, City toCity, int distance)
+    {
+        weights[fromCity.getCityNum()-1][toCity.getCityNum()-1] = distance;
+    }
+    
+    /**
+     * Removes a road from one city to another.
+     * @param fromCity  The origin vertex for the edge.
+     * @param toCity  The end vertex for the edge.
+     */
+    public boolean removeRoad(City fromCity, City toCity)
+    {
+        int weight = weights[fromCity.getCityNum()-1][toCity.getCityNum()-1];
+        if (weight != 0)
+        {
+            weights[fromCity.getCityNum()-1][toCity.getCityNum()-1] = 0;
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
     
 }

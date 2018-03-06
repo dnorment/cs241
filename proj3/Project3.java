@@ -24,13 +24,12 @@ public class Project3
     public static void main(String[] args) throws IOException
     {
         Scanner kb = new Scanner(System.in);
-        
         Digraph graph = new Digraph();
         
         String input;
         char cmd = '~';
-        String firstCity;
-        String secondCity;
+        String firstCity, secondCity;
+        City fromCity, toCity;
         kb = new Scanner(System.in); //Scanner to read command from user
         while(cmd != 'E') //exit when command is E
         {
@@ -43,9 +42,10 @@ public class Project3
                 case 'Q': //query city information given code
                     System.out.print("City code: ");
                     firstCity = parser.next();
-                    if (graph.getCity(firstCity) != null)
+                    fromCity = graph.getCity(firstCity);
+                    if (fromCity != null)
                     {
-                        System.out.print(graph.getCity(firstCity));
+                        System.out.print(fromCity);
                     }
                     else
                     {
@@ -56,20 +56,45 @@ public class Project3
                     System.out.print("City codes: ");
                     firstCity = parser.next();
                     secondCity = parser.next();
-                    System.out.print(firstCity + " " + secondCity);                     //TODO
+                    fromCity = graph.getCity(firstCity);
+                    toCity = graph.getCity(secondCity);
+                    
                     break;
                 case 'I': //insert a road given 2 cities and distance
                     System.out.print("City codes and distance: ");
                     firstCity = parser.next();
                     secondCity = parser.next();
                     int distance = parser.nextInt();
-                    System.out.print(firstCity + " " + secondCity + " " + distance);    //TODO
+                    graph.insertRoad(graph.getCity(firstCity), graph.getCity(secondCity), distance);
+                    System.out.printf("You have inserted a road from %s to %s with a distance of %d.",
+                                    graph.getCity(firstCity).getCityName(), graph.getCity(secondCity).getCityName(), distance);
                     break;
                 case 'R': //remove road given 2 city codes
                     System.out.print("City codes: ");
                     firstCity = parser.next();
                     secondCity = parser.next();
-                    System.out.print(firstCity + " " + secondCity);                     //TODO
+                    fromCity = graph.getCity(firstCity);
+                    toCity = graph.getCity(secondCity);
+                    if (fromCity == null)
+                    {
+                        System.out.print("The city with code " + firstCity + " doesn't exist.");
+                    }
+                    else if (toCity == null)
+                    {
+                        System.out.print("The city with code " + secondCity + " doesn't exist.");
+                    }
+                    else
+                    {
+                        boolean removed = graph.removeRoad(fromCity, toCity);
+                        if (removed)
+                        {
+                            System.out.printf("The road from %s to %s was removed.", fromCity.getCityName(), toCity.getCityName());
+                        }
+                        else
+                        {
+                            System.out.printf("The road from %s to %s doesn't exist.", fromCity.getCityName(), toCity.getCityName());
+                        }
+                    }
                     break;
                 case 'H': //print menu
                     Project3.printOptions();
