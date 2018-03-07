@@ -1,10 +1,10 @@
 import java.io.*;
 import java.util.Scanner;
 /**
- * An implentation of the ADT Directed Graph using an adjacency matrix.
+ * An implementation of the ADT Directed Graph using an adjacency matrix.
  *
  * @author Daniel J. Norment
- * @version 1.0
+ * @version 1.1
  */
 public class Digraph
 {
@@ -63,11 +63,90 @@ public class Digraph
     }
     
     /**
+     * Returns the City object with the given city number.
+     * @return  The City object with the given city number.
+     */
+    public City getCity(int cityNum)
+    {
+        City target = null;
+        for (int i=0; i<cities.length; i++)
+        {
+            if (cities[i].getCityNum() == cityNum)
+            {
+                target = cities[i];
+            }
+        }
+        return target;
+    }    
+    
+    /**
+     * Finds the shortest path from one city to another.
+     * @param fromCity  The source vertex for the search.
+     * @param toCity  The destination vertex for the search.
+     * @return  The TableNode with the destination city. The city contains the path and distance.
+     */
+    public TableNode getShortestPath(City fromCity, City toCity)
+    {
+        PriorityQueueSingleLinked<TableNode> priQueue = new PriorityQueueSingleLinked<TableNode>();
+        //step 1, 2 - set distance estimates to infinity (0 for source), mark all nodes unvisited and set source as current
+        for (int i=0; i<cities.length; i++)
+        {
+           cities[i].setDistEstimate(Integer.MAX_VALUE);
+           cities[i].setVisited(false);
+        }
+        fromCity.setPath(fromCity.getCityCode());
+        fromCity.setDistEstimate(0);
+        
+        TableNode front = new TableNode(fromCity, 0, null);
+        priQueue.add(front, 0);
+        
+        while (!priQueue.isEmpty() && front.getLeft() != toCity)       //step 3 - consider all unvisited neighbors and calculate their distance from source, then relax
+        {
+            front = priQueue.remove();
+            City frontCity = front.getLeft();
+            if (!frontCity.visited())
+            {
+                int i = frontCity.getCityNum() - 1;
+                for (int j=0; j<weights.length; j++)
+                {
+                    if (weights[i][j] != 0) //if neighbor and not visited
+                    {
+                        City neighbor = getCity(j+1);
+
+                        if (neighbor.getDistEstimate() > frontCity.getDistEstimate() + weights[i][j])
+                        {
+                            neighbor.setDistEstimate(frontCity.getDistEstimate() + weights[i][j]);  //relax edge
+                            neighbor.setPath(frontCity.getPath() + ", " + neighbor.getCityCode());  //add neighbor to each path
+                        }
+                        priQueue.add(new TableNode(neighbor, neighbor.getDistEstimate(), frontCity), neighbor.getDistEstimate());
+                    }
+                }
+            }
+            frontCity.setVisited(true);     //step 4 - when done considering all neighbors, mark current node as visited
+            //step 5 - set unvisited node with smallest distance from source as next current and repeat from step 3
+        }
+        //here, front is either target or last (both are destination)
+        priQueue.clear();
+        return front;
+    }
+    
+    /**
+     * Returns the distance from one city to another (single edge).
+     * @param fromCity  The origin vertex for the edge.
+     * @param toCity  The end vertex for the edge.
+     * @return  The distance along the given road.
+     */
+    public int getDistance(City fromCity, City toCity)
+    {
+        return weights[fromCity.getCityNum()-1][toCity.getCityNum()-1];
+    }
+    
+    /**
      * Inserts a road from one city to another with the given distance between them.
      * @param fromCity  The origin vertex for the edge.
      * @param toCity  The end vertex for the edge.
      */
-    public void insertRoad(City fromCity, City toCity, int distance)
+    public void setDistance(City fromCity, City toCity, int distance)
     {
         weights[fromCity.getCityNum()-1][toCity.getCityNum()-1] = distance;
     }
@@ -76,6 +155,7 @@ public class Digraph
      * Removes a road from one city to another.
      * @param fromCity  The origin vertex for the edge.
      * @param toCity  The end vertex for the edge.
+     * @return  True if the road was removed, false if the road doesn't exist.
      */
     public boolean removeRoad(City fromCity, City toCity)
     {

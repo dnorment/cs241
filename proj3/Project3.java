@@ -30,6 +30,7 @@ public class Project3
         char cmd = '~';
         String firstCity, secondCity;
         City fromCity, toCity;
+        int distance;
         kb = new Scanner(System.in); //Scanner to read command from user
         while(cmd != 'E') //exit when command is E
         {
@@ -58,16 +59,30 @@ public class Project3
                     secondCity = parser.next();
                     fromCity = graph.getCity(firstCity);
                     toCity = graph.getCity(secondCity);
-                    
+                    TableNode path = graph.getShortestPath(fromCity, toCity);
+                    String route = path.getLeft().getPath();
+                    distance = path.getLeft().getDistEstimate();
+                    if (distance != 0 || fromCity == toCity)
+                    {
+                        System.out.printf("The minimum distance between %s and %s is %d through the route: %s.",
+                                        fromCity.getCityName(), toCity.getCityName(), distance, route);
+                    }
+                    else
+                    {
+                        System.out.printf("No route was found from %s to %s.",
+                                        fromCity.getCityName(), toCity.getCityName());
+                    }
                     break;
                 case 'I': //insert a road given 2 cities and distance
                     System.out.print("City codes and distance: ");
                     firstCity = parser.next();
                     secondCity = parser.next();
-                    int distance = parser.nextInt();
-                    graph.insertRoad(graph.getCity(firstCity), graph.getCity(secondCity), distance);
+                    distance = parser.nextInt();
+                    fromCity = graph.getCity(firstCity);
+                    toCity = graph.getCity(secondCity);
+                    graph.setDistance(fromCity, toCity, distance);
                     System.out.printf("You have inserted a road from %s to %s with a distance of %d.",
-                                    graph.getCity(firstCity).getCityName(), graph.getCity(secondCity).getCityName(), distance);
+                                        fromCity.getCityName(), toCity.getCityName(), distance);
                     break;
                 case 'R': //remove road given 2 city codes
                     System.out.print("City codes: ");
